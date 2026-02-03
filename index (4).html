@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Gift</title>
+
+<style>
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background:#fff1f2;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+  }
+
+  .page{
+    width:90%;
+    max-width:380px;
+    background:white;
+    padding:22px;
+    border-radius:22px;
+    box-shadow:0 12px 30px rgba(255,0,0,.15);
+    text-align:center;
+    display:none;
+    z-index:2;
+  }
+  .page.active{display:block;}
+
+  h2{color:#c53030;}
+  p{color:#555;}
+
+  button{
+    margin-top:16px;
+    padding:12px 26px;
+    border:none;
+    border-radius:999px;
+    background:#e53e3e;
+    color:white;
+    font-size:15px;
+    cursor:pointer;
+  }
+  button:hover{background:#c53030;}
+
+  input[type="text"]{
+    width:100%;
+    padding:10px;
+    margin-top:12px;
+    border-radius:14px;
+    border:1px solid #f2b8b8;
+  }
+
+  .error{
+    margin-top:8px;
+    color:#e53e3e;
+  }
+
+  /* ===== HALAMAN 1 ===== */
+  .intro{
+    background:transparent;
+    box-shadow:none;
+    padding:0;
+  }
+
+  .video-frame{
+    padding:10px;
+    border-radius:22px;
+    background:#fff5f5;
+    border:3px solid #f2b8b8;
+    box-shadow:0 8px 20px rgba(255,0,0,.15);
+  }
+
+  .video-frame video{
+    width:100%;
+    border-radius:16px;
+  }
+
+  /* ===== SLIDER ===== */
+  .meter-box{
+    margin-top:18px;
+    padding:18px;
+    border-radius:22px;
+    background:#fff5f5;
+    border:3px solid #f2b8b8;
+  }
+  .meter-label{
+    font-weight:bold;
+    color:#c53030;
+    margin-bottom:10px;
+  }
+  input[type="range"]{
+    -webkit-appearance:none;
+    width:100%;
+    height:18px;
+    border-radius:999px;
+    background:#f2b8b8;
+    outline:none;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#e53e3e;
+    border:4px solid white;
+    cursor:pointer;
+  }
+  .percent{
+    margin-top:10px;
+    font-size:26px;
+    font-weight:bold;
+    color:#c53030;
+  }
+
+  /* ===== FOTO ===== */
+  .frame{
+    margin-top:16px;
+    padding:10px;
+    border-radius:20px;
+    background:#fff5f5;
+    border:3px solid #f2b8b8;
+  }
+  .frame img{
+    width:100%;
+    border-radius:16px;
+  }
+
+  /* ===== EMOJI TERBANG ===== */
+  .emoji{
+    position:absolute;
+    bottom:-40px;
+    font-size:24px;
+    animation:floatUp 4s linear forwards;
+    pointer-events:none;
+    z-index:1;
+  }
+
+  @keyframes floatUp{
+    from{transform:translateY(0); opacity:1;}
+    to{transform:translateY(-120vh); opacity:0;}
+  }
+</style>
+</head>
+
+<body>
+
+<!-- 🔊 BACKSOUND -->
+<audio id="bgm" loop>
+  <source src="This song is so cute   Spotify playlist in my bio..mp3" type="audio/mpeg">
+</audio>
+
+<!-- 1️⃣ HALAMAN AWAL -->
+<div class="page active intro" id="page1">
+  <div class="video-frame">
+    <video 
+      src="video_20260202_205209_edit.mp4"
+      autoplay
+      muted
+      loop
+      playsinline>
+    </video>
+  </div>
+  <button onclick="go(2)">start</button>
+</div>
+
+<!-- 2️⃣ TEKA-TEKI -->
+<div class="page" id="page2">
+  <h2>siapa yang buat ini?</h2>
+  <p>coba tebak, tebak aja dulu manatau benar</p>
+  <input type="text" id="ans1" placeholder="Jawabanmu...">
+  <button onclick="check1()">Jawab</button>
+  <div class="error" id="err1"></div>
+</div>
+
+<!-- 3️⃣ SLIDER -->
+<div class="page" id="page3">
+  <h2>opsional</h2>
+  <p>Seberapa cantik yang buat ini menurutmu? 😎</p>
+
+  <div class="meter-box">
+    <div class="meter-label">Meter Cantik 💗</div>
+    <input type="range" min="0" max="100" value="0" id="slider">
+    <div class="percent"><span id="val">0</span>%</div>
+  </div>
+
+  <button onclick="check2()">Lanjut</button>
+  <div class="error" id="err2"></div>
+</div>
+
+<!-- 4️⃣ FOTO -->
+<div class="page" id="page4">
+  <h2>💌 Happy Valentine 💌</h2>
+  <p>izinnn</p>
+
+  <div class="frame">
+    <img src="/1000099069.jpg">
+  </div>
+</div>
+
+<script>
+  function go(n){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page'+n).classList.add('active');
+
+    if(n === 4){
+      startEmoji();
+      const bgm = document.getElementById("bgm");
+      bgm.volume = 0.5;
+      bgm.play();
+    }
+  }
+
+  function check1(){
+    const benar = "fae imut lucu nan menggemaskan";
+    const a = document.getElementById('ans1').value.toLowerCase();
+    if(a === benar) go(3);
+    else document.getElementById('err1').innerText = "no no";
+  }
+
+  const slider = document.getElementById('slider');
+  const val = document.getElementById('val');
+
+  function updateSlider(){
+    const v = slider.value;
+    val.innerText = v;
+    slider.style.background =
+      `linear-gradient(to right,
+        #e53e3e 0%,
+        #e53e3e ${v}%,
+        #f2b8b8 ${v}%,
+        #f2b8b8 100%)`;
+  }
+  slider.addEventListener('input', updateSlider);
+  updateSlider();
+
+  function check2(){
+    if(slider.value == 100) go(4);
+    else document.getElementById('err2').innerText = "dih🙄";
+  }
+
+  function startEmoji(){
+    const emojis = ["❤️","💖","💘","✨","🌸"];
+    setInterval(()=>{
+      const e = document.createElement("div");
+      e.className = "emoji";
+      e.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+      e.style.left = Math.random()*100 + "vw";
+      e.style.fontSize = (20 + Math.random()*20) + "px";
+      document.body.appendChild(e);
+      setTimeout(()=>e.remove(),4000);
+    },300);
+  }
+</script>
+
+</body>
+</html>
